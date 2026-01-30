@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { sessionAPI, QuestionsResponse } from '../services/api';
 import '../styles/App.css';
 
+type View = 'landing' | 'learner' | 'examiner';
+
 interface ExaminerPageProps {
   sessionId: string;
   token: string;
-  onNavigate: (view: string) => void;
+  onNavigate: (view: View, data?: any) => void;
 }
 
 export const ExaminerPage: React.FC<ExaminerPageProps> = ({ sessionId, token, onNavigate }) => {

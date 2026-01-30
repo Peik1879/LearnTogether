@@ -2,21 +2,21 @@ import React, { useState, useEffect, useRef } from 'react';
 import { sessionAPI, CurrentQuestionResponse } from '../services/api';
 import '../styles/App.css';
 
+type View = 'landing' | 'learner' | 'examiner';
+
 interface LearnerPageProps {
   sessionId: string;
   token: string;
-  onNavigate: (view: string) => void;
+  onNavigate: (view: View, data?: any) => void;
 }
 
 export const LearnerPage: React.FC<LearnerPageProps> = ({ sessionId, token, onNavigate }) => {
   const [step, setStep] = useState<'upload' | 'waiting' | 'question'>('upload');
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);
-  const [generating, setGenerating] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState<CurrentQuestionResponse | null>(null);
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const pollingIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const pollingIntervalRef = useRef<number | null>(null);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
