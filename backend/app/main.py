@@ -18,7 +18,8 @@ cors_origins = [
     "http://localhost:5174",
 ]
 if cors_origins_env:
-    cors_origins = [o.strip() for o in cors_origins_env.split(",") if o.strip()]
+    additional_origins = [o.strip() for o in cors_origins_env.split(",") if o.strip()]
+    cors_origins.extend(additional_origins)
 
 app.add_middleware(
     CORSMiddleware,
