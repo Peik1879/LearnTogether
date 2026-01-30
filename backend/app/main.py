@@ -92,12 +92,14 @@ def join_session(session_id: str, body: dict):
 async def upload_pdfs(
     session_id: str,
     files: List[UploadFile] = File(...),
-    token: str = Depends(lambda x_token=Header(None): verify_token(session_id, "learner", x_token))
+    x_token: Optional[str] = Header(None)
 ):
     """
     Upload PDFs for learning material
     Learner only
     """
+    verify_token(session_id, "learner", x_token)
+    
     if not files:
         raise HTTPException(status_code=400, detail="No files provided")
     
