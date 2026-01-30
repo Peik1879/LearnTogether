@@ -126,13 +126,14 @@ async def upload_pdfs(
 def generate_questions(
     session_id: str,
     body: dict,
-    token: str = Depends(lambda x_token=Header(None): verify_token(session_id, "learner", x_token))
+    x_token: Optional[str] = Header(None)
 ):
     """
     Generate questions from uploaded PDFs
     Learner only
     Body: { "pdf_texts": { "filename": "text content", ... } }
     """
+    verify_token(session_id, "learner", x_token)
     session = store.get_session(session_id)
     if not session:
         raise HTTPException(status_code=404, detail="Session not found")
@@ -155,13 +156,14 @@ def generate_questions(
 @app.get("/session/{session_id}/current")
 def get_current_question(
     session_id: str,
-    token: str = Depends(lambda x_token=Header(None): verify_token(session_id, "learner", x_token))
+    x_token: Optional[str] = Header(None)
 ):
     """
     Get current question for learner
     Learner only
     Returns locked state if not revealed, or the actual question if revealed
     """
+    verify_token(session_id, "learner", x_token)
     result = SessionService.get_learner_current(session_id)
     if result is None:
         raise HTTPException(status_code=404, detail="Session not found")
@@ -176,12 +178,13 @@ def get_current_question(
 @app.get("/session/{session_id}/questions")
 def get_all_questions(
     session_id: str,
-    token: str = Depends(lambda x_token=Header(None): verify_token(session_id, "examiner", x_token))
+    x_token: Optional[str] = Header(None)
 ):
     """
     Get all questions for examiner
     Examiner only - returns full question list with metadata
     """
+    verify_token(session_id, "examiner", x_token)
     result = SessionService.get_session_status(session_id, "examiner")
     if result is None:
         raise HTTPException(status_code=404, detail="Session not found")
@@ -192,12 +195,13 @@ def get_all_questions(
 @app.post("/session/{session_id}/reveal")
 def reveal_current_question(
     session_id: str,
-    token: str = Depends(lambda x_token=Header(None): verify_token(session_id, "examiner", x_token))
+    x_token: Optional[str] = Header(None)
 ):
     """
     Reveal current question to learner
     Examiner only
     """
+    verify_token(session_id, "examiner", x_token)
     success = SessionService.reveal_current_question(session_id)
     if not success:
         raise HTTPException(status_code=404, detail="Session not found")
@@ -208,12 +212,13 @@ def reveal_current_question(
 @app.post("/session/{session_id}/next")
 def next_question(
     session_id: str,
-    token: str = Depends(lambda x_token=Header(None): verify_token(session_id, "examiner", x_token))
+    x_token: Optional[str] = Header(None)
 ):
     """
     Move to next question
     Examiner only
     """
+    verify_token(session_id, "examiner", x_token)
     success = SessionService.next_question(session_id)
     if not success:
         raise HTTPException(status_code=400, detail="No more questions or session not found")
@@ -225,13 +230,14 @@ def next_question(
 def grade_question(
     session_id: str,
     body: dict,
-    token: str = Depends(lambda x_token=Header(None): verify_token(session_id, "examiner", x_token))
+    x_token: Optional[str] = Header(None)
 ):
     """
     Grade a question
     Examiner only
     Body: { "index": int, "status": "ok" | "meh" | "fail" }
     """
+    verify_token(session_id, "examiner", x_token)
     index = body.get("index")
     status = body.get("status")
     
