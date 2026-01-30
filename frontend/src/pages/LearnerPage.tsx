@@ -88,7 +88,7 @@ export const LearnerPage: React.FC<LearnerPageProps> = ({ sessionId, token, onNa
     <div className="container">
       <div className="card">
         <div className="header">
-          <h1>StudyDuel - Learner</h1>
+          <h1>LearnTogether - Learner</h1>
           <div className="session-info">
             <span>Session: <code>{sessionId}</code></span>
             <button onClick={handleLogout} className="btn btn-small">Logout</button>

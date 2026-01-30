@@ -104,7 +104,7 @@ export const ExaminerPage: React.FC<ExaminerPageProps> = ({ sessionId, token, on
     <div className="container">
       <div className="card">
         <div className="header">
-          <h1>StudyDuel - Examiner</h1>
+          <h1>LearnTogether - Examiner</h1>
           <div className="session-info">
             <span>Session: <code>{sessionId}</code></span>
             <button onClick={handleLogout} className="btn btn-small">Logout</button>

@@ -66,7 +66,7 @@ export const Landing: React.FC<LandingProps> = ({ onNavigate }) => {
   return (
     <div className="container">
       <div className="card">
-        <h1>StudyDuel</h1>
+        <h1>LearnTogether</h1>
         <p className="subtitle">1-zu-1 Lernabfragen</p>
 
         {error && <div className="error">{error}</div>}
