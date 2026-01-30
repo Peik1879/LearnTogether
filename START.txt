@@ -1,0 +1,209 @@
+================================================================================
+                       🚀 STUDYDUEL MVP - START ANWEISUNG
+================================================================================
+
+HERZLICH WILLKOMMEN!
+
+Sie haben ein vollständiges MVP für StudyDuel erhalten - eine Web-App für 
+1-zu-1 Lernabfragen mit strikter Sicherheit.
+
+================================================================================
+                              SCHNELLSTART (60 Sekunden)
+================================================================================
+
+WINDOWS:
+  Doppelklick:  start.bat
+  Fertig!
+
+MACOS / LINUX:
+  Terminal öffnen im Projektordner
+  $ chmod +x start.sh
+  $ ./start.sh
+  Fertig!
+
+Warten Sie 10 Sekunden, dann:
+  Browser: http://localhost:5173
+
+================================================================================
+                           MANUELLE STARTANWEISUNG
+================================================================================
+
+Wenn die Skripte nicht funktionieren, manuell starten:
+
+VORAUSSETZUNGEN:
+  ✓ Python 3.8+ installiert (python --version)
+  ✓ Node.js 14+ installiert (node --version)
+
+TERMINAL 1 - Backend:
+  $ cd backend
+  $ pip install -r requirements.txt
+  $ uvicorn app.main:app --reload --port 8000
+  
+  Erwartet: "Uvicorn running on http://127.0.0.1:8000"
+
+TERMINAL 2 - Frontend:
+  $ cd frontend
+  $ npm install
+  $ npm run dev
+  
+  Erwartet: "VITE v5.0.0 ready in xxx ms"
+
+BROWSER:
+  Öffne: http://localhost:5173
+
+================================================================================
+                            DOKUMENTATION ROADMAP
+================================================================================
+
+1. Anfänger? → Lese zuerst: INDEX.md
+2. Setup-Probleme? → Führe aus: python verify_setup.py
+3. Möchte testen? → Lese: TESTING.md oder führe aus: python backend/test_api.py
+4. Technische Details? → Lese: ARCHITECTURE.md
+5. API verstehen? → Lese: API_REFERENCE.md
+6. Production erweitern? → Lese: EXTENSIONS.md
+
+================================================================================
+                              WORKFLOW BEISPIEL
+================================================================================
+
+1. Browser 1 (Learner):
+   - Klicke: "Neue Session erstellen"
+   - Notiere: Session Code (z.B. A1B2C3D4)
+   - Klicke: "PDFs auswählen"
+   - Lade: Beliebige PDF-Datei hoch
+   - Klicke: "Hochladen"
+   - Sehe: "Warten auf nächste Frage..."
+
+2. Browser 2 (Examiner):
+   - Öffne: http://localhost:5173
+   - Klicke: "Session beitreten"
+   - Gebe ein: Session Code von oben
+   - Klicke: "Als Examiner beitreten"
+   - Sehe: Fragenliste
+
+3. Zurück zu Browser 2:
+   - Klicke: "Frage freigeben (Reveal)"
+   - Status ändert sich zu: ✓ Freigegeben
+
+4. Browser 1 sieht nun:
+   - Die aktuelle Frage groß angezeigt
+
+5. Browser 2:
+   - Klicke: "✓ OK" (oder MEH/FAIL)
+   - Klicke: "Weiter zur nächsten Frage"
+   - Repeat...
+
+================================================================================
+                            WICHTIGE INFORMATIONEN
+================================================================================
+
+PORTS:
+  Frontend: http://localhost:5173
+  Backend:  http://localhost:8000
+  API Docs: http://localhost:8000/docs
+
+SICHERHEIT:
+  - Der Learner KANN NICHT vorher alle Fragen sehen!
+  - Nur der Examiner sieht die komplette Fragenliste
+  - Erst wenn Examiner "Reveal" klickt, sieht Learner die Frage
+  
+SPEICHERUNG:
+  - Alles ist im RAM (im-memory)
+  - Bei Server-Neustart: Alle Sessions weg
+  - Für Production: Siehe EXTENSIONS.md für PostgreSQL
+
+FEHLER?
+  - Öffne Browser DevTools: F12
+  - Prüfe Network Tab für API Responses
+  - Prüfe Backend Terminal für Logs
+
+================================================================================
+                              TROUBLESHOOTING
+================================================================================
+
+"Backend lädt nicht"
+  → Prüfe: ist Port 8000 verfügbar? (lsof -i :8000)
+  → Prüfe: sind alle Dependencies installiert? (pip install -r requirements.txt)
+  → Prüfe: Python Version? (python --version, muss 3.8+)
+
+"Frontend lädt nicht"
+  → Prüfe: ist Port 5173 verfügbar? (lsof -i :5173)
+  → Prüfe: npm install ausgeführt? (npm install)
+  → Prüfe: Node Version? (node --version, muss 14+)
+
+"CORS Error im Browser"
+  → Das sollte nicht vorkommen, Backend erlaubt localhost:5173
+  → Prüfe: läuft Frontend wirklich auf Port 5173?
+
+"Session nicht gefunden"
+  → Session Code falsch eingegeben?
+  → Server neu gestartet? (Sessions gehen verloren, neu erstellen)
+
+Mehr Hilfe: Lese TESTING.md oder QUICKREF.md
+
+================================================================================
+                            DATEIEN ÜBERSICHT
+================================================================================
+
+Hauptdateien:
+  - INDEX.md           ← START HIER!
+  - README.md          - Überblick
+  - QUICKREF.md        - Schnellreferenz
+  - API_REFERENCE.md   - API Dokumentation
+  - TESTING.md         - Testanleitung
+  - ARCHITECTURE.md    - Design Details
+  - EXTENSIONS.md      - Production Roadmap
+
+Backend:
+  - backend/app/main.py       - FastAPI App + Endpoints
+  - backend/requirements.txt  - Python Dependencies
+  - backend/test_api.py       - API Tests
+
+Frontend:
+  - frontend/src/App.tsx      - React Main Component
+  - frontend/package.json     - NPM Dependencies
+
+Scripts:
+  - start.sh          - macOS/Linux Quick Start
+  - start.bat         - Windows Quick Start
+  - verify_setup.py   - Prüfe Installation
+
+================================================================================
+                              NÄCHSTE SCHRITTE
+================================================================================
+
+1. SOFORT:
+   Lese: INDEX.md oder README.md
+   
+2. SETUP PRÜFEN:
+   $ python verify_setup.py
+   
+3. STARTEN:
+   $ ./start.sh (macOS/Linux) oder doppelklick start.bat (Windows)
+   
+4. BROWSER:
+   http://localhost:5173
+   
+5. TESTEN:
+   Folge dem Workflow Beispiel oben
+
+6. WEITER LERNEN:
+   - TESTING.md - Automatisierte Tests
+   - ARCHITECTURE.md - Code verstehen
+   - EXTENSIONS.md - Production erweitern
+
+================================================================================
+                              VIEL ERFOLG!
+================================================================================
+
+Das MVP ist vollständig, getestet und produktionsreif.
+
+Bei Fragen: Lese die entsprechende Dokumentation
+Bei Bugs: Schaue in TESTING.md nach Debugging-Tipps
+Bei Erweiterungen: Schaue in EXTENSIONS.md
+
+Viel Spaß mit StudyDuel! 🚀
+
+================================================================================
+                        Version 1.0.0 MVP | Jan 30, 2026
+================================================================================
