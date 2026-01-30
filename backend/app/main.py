@@ -96,9 +96,9 @@ async def upload_pdfs(
 ):
     """
     Upload PDFs for learning material
-    Learner only
+    Examiner only (the creator uploads the study material)
     """
-    verify_token(session_id, "learner", x_token)
+    verify_token(session_id, "examiner", x_token)
     
     if not files:
         raise HTTPException(status_code=400, detail="No files provided")
