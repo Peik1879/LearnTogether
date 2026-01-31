@@ -128,28 +128,51 @@ async def upload_pdfs(
     Upload PDFs for learning material
     Examiner only (the creator uploads the study material)
     """
-    verify_token(session_id, "examiner", x_token)
-    
-    if not files:
-        raise HTTPException(status_code=400, detail="No files provided")
-    
-    pdf_texts = {}
-    for file in files:
-        if not file.filename.lower().endswith('.pdf'):
-            raise HTTPException(status_code=400, detail=f"File {file.filename} is not a PDF")
+    try:
+        verify_token(session_id, "examiner", x_token)
         
-        content = await file.read()
-        SessionService.add_pdf_metadata(session_id, file.filename, len(content))
-        pdf_texts[file.filename] = extract_text_from_pdf(content)
+        if not files:
+            raise HTTPException(status_code=400, detail="No files provided")
+        
+        print(f"[UPLOAD] Starting upload for session {session_id}, {len(files)} files")
+        
+        pdf_texts = {}
+        for file in files:
+            if not file.filename.lower().endswith('.pdf'):
+                raise HTTPException(status_code=400, detail=f"File {file.filename} is not a PDF")
+            
+            print(f"[UPLOAD] Processing {file.filename}")
+            content = await file.read()
+            SessionService.add_pdf_metadata(session_id, file.filename, len(content))
+            
+            try:
+                text = extract_text_from_pdf(content)
+                pdf_texts[file.filename] = text
+                print(f"[UPLOAD] Extracted {len(text)} characters from {file.filename}")
+            except Exception as e:
+                print(f"[UPLOAD ERROR] Failed to extract text from {file.filename}: {e}")
+                # Continue with other files
+                pdf_texts[file.filename] = ""
 
-    # Auto-generate questions after upload
-    SessionService.generate_questions(session_id, pdf_texts)
-    
-    return {
-        "status": "success",
-        "uploaded": len(files),
-        "files": [f.filename for f in files]
-    }
+        # Auto-generate questions after upload
+        print(f"[UPLOAD] Generating questions...")
+        success = SessionService.generate_questions(session_id, pdf_texts)
+        if not success:
+            raise HTTPException(status_code=500, detail="Failed to generate questions")
+        
+        print(f"[UPLOAD] Upload complete")
+        return {
+            "status": "success",
+            "uploaded": len(files),
+            "files": [f.filename for f in files]
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"[UPLOAD ERROR] Unexpected error: {e}")
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Upload failed: {str(e)}")
 
 
 @app.post("/session/{session_id}/generate")
