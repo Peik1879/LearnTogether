@@ -21,6 +21,10 @@ if cors_origins_env:
     additional_origins = [o.strip() for o in cors_origins_env.split(",") if o.strip()]
     cors_origins.extend(additional_origins)
 
+# Debug: Print CORS origins on startup
+print(f"[CORS] Configured origins: {cors_origins}")
+print(f"[CORS] Environment variable CORS_ORIGINS: {cors_origins_env or 'NOT SET'}")
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=cors_origins,
