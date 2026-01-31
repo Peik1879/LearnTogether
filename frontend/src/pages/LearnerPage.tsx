@@ -38,8 +38,14 @@ export const LearnerPage: React.FC<LearnerPageProps> = ({ sessionId, token, role
     setError('');
     try {
       await sessionAPI.uploadPdfs(sessionId, selectedFiles, token);
-      setStep('waiting');
-      startPolling();
+      
+      // If examiner (creator), go to ExaminerPage after upload
+      if (role === 'examiner') {
+        onNavigate('examiner', { sessionId, token, role });
+      } else {
+        setStep('waiting');
+        startPolling();
+      }
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Upload fehlgeschlagen');
     } finally {
