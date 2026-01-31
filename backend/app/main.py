@@ -259,6 +259,11 @@ def grade_question(
 # Health Check
 # ============================================================================
 
+@app.get("/")
+def root():
+    """Root endpoint"""
+    return {"message": "LearnTogether API is running", "cors_origins": cors_origins}
+
 @app.get("/health")
 def health():
     """Health check endpoint"""
