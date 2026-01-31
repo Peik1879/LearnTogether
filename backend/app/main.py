@@ -27,7 +27,7 @@ print(f"[CORS] Environment variable CORS_ORIGINS: {cors_origins_env or 'NOT SET'
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=cors_origins,
+    allow_origins=["*"],  # Temporarily allow all origins for testing
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
