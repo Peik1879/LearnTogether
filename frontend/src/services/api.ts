@@ -110,6 +110,15 @@ export const sessionAPI = {
     return response.data;
   },
 
+  jumpToQuestion: async (sessionId: string, index: number, token: string): Promise<any> => {
+    const response = await api.post(
+      `/session/${sessionId}/jump/${index}`,
+      {},
+      withToken(token)
+    );
+    return response.data;
+  },
+
   gradeQuestion: async (sessionId: string, index: number, status: 'ok' | 'meh' | 'fail', token: string): Promise<any> => {
     const response = await api.post(
       `/session/${sessionId}/grade`,

@@ -130,6 +130,20 @@ class SessionService:
         return False  # No more questions
 
     @staticmethod
+    def jump_to_question(session_id: str, index: int) -> bool:
+        """Jump to a specific question by index"""
+        session = store.get_session(session_id)
+        if not session:
+            return False
+        
+        if index < 0 or index >= len(session.questions):
+            return False
+        
+        session.current_index = index
+        session.revealed = False
+        return True
+
+    @staticmethod
     def grade_question(session_id: str, index: int, status: str) -> bool:
         """Grade a question"""
         session = store.get_session(session_id)

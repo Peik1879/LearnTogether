@@ -39,13 +39,8 @@ export const LearnerPage: React.FC<LearnerPageProps> = ({ sessionId, token, role
     try {
       await sessionAPI.uploadPdfs(sessionId, selectedFiles, token);
       
-      // If examiner (creator), go to ExaminerPage after upload
-      if (role === 'examiner') {
-        onNavigate('examiner', { sessionId, token, role });
-      } else {
-        setStep('waiting');
-        startPolling();
-      }
+      // After successful upload, navigate to examiner view
+      onNavigate('examiner', { sessionId, token, role });
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Upload fehlgeschlagen');
     } finally {

@@ -73,6 +73,20 @@ export const ExaminerPage: React.FC<ExaminerPageProps> = ({ sessionId, token, on
     onNavigate('landing');
   };
 
+  const handleQuestionClick = async (index: number) => {
+    // Jump to a specific question
+    setActionLoading(true);
+    setError('');
+    try {
+      await sessionAPI.jumpToQuestion(sessionId, index, token);
+      await loadSession();
+    } catch (err: any) {
+      setError(err.response?.data?.detail || 'Konnte nicht zu Frage springen');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="container">
@@ -188,6 +202,9 @@ export const ExaminerPage: React.FC<ExaminerPageProps> = ({ sessionId, token, on
                 <li
                   key={idx}
                   className={`question-item ${idx === session.current_index ? 'current' : ''} ${session.grades[idx] ? 'graded-' + session.grades[idx] : ''}`}
+                  onClick={() => handleQuestionClick(idx)}
+                  style={{ cursor: 'pointer' }}
+                  title="Klicken um zu dieser Frage zu springen"
                 >
                   <span className="question-index">{idx + 1}</span>
                   <span className="question-text">{q}</span>

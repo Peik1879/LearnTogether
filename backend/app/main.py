@@ -231,6 +231,22 @@ def next_question(
     
     return {"status": "success"}
 
+@app.post("/session/{session_id}/jump/{index}")
+def jump_to_question(
+    session_id: str,
+    index: int,
+    x_token: Optional[str] = Header(None)
+):
+    """
+    Jump to a specific question by index
+    Examiner only
+    """
+    verify_token(session_id, "examiner", x_token)
+    success = SessionService.jump_to_question(session_id, index)
+    if not success:
+        raise HTTPException(status_code=400, detail="Invalid question index or session not found")
+    
+    return {"status": "jumped", "index": index}
 
 @app.post("/session/{session_id}/grade")
 def grade_question(
