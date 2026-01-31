@@ -7,11 +7,14 @@ type View = 'landing' | 'learner' | 'examiner';
 interface LearnerPageProps {
   sessionId: string;
   token: string;
+  role: 'learner' | 'examiner';
   onNavigate: (view: View, data?: any) => void;
 }
 
-export const LearnerPage: React.FC<LearnerPageProps> = ({ sessionId, token, onNavigate }) => {
-  const [step, setStep] = useState<'upload' | 'waiting' | 'question'>('upload');
+export const LearnerPage: React.FC<LearnerPageProps> = ({ sessionId, token, role, onNavigate }) => {
+  const [step, setStep] = useState<'upload' | 'waiting' | 'question'>(
+    role === 'learner' ? 'waiting' : 'upload'
+  );
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState<CurrentQuestionResponse | null>(null);
@@ -76,8 +79,11 @@ export const LearnerPage: React.FC<LearnerPageProps> = ({ sessionId, token, onNa
   };
 
   useEffect(() => {
+    if (role === 'learner') {
+      startPolling();
+    }
     return () => stopPolling();
-  }, []);
+  }, [role]);
 
   const handleLogout = () => {
     stopPolling();
@@ -97,7 +103,7 @@ export const LearnerPage: React.FC<LearnerPageProps> = ({ sessionId, token, onNa
 
         {error && <div className="error">{error}</div>}
 
-        {step === 'upload' && (
+        {step === 'upload' && role === 'examiner' && (
           <div className="upload-section">
             <h2>PDFs hochladen</h2>
             <p>Laden Sie die Lernmaterialien hoch, aus denen Fragen generiert werden.</p>

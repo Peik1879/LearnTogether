@@ -330,16 +330,18 @@ h3 {
   border-radius: 8px;
   border-left: 4px solid var(--color-primary);
   margin-bottom: 20px;
-  font-size: 18px;
-  line-height: 1.6;
-  min-height: 100px;
+  font-size: 20px;
+  line-height: 1.7;
+  min-height: 120px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
 }
 
-.question-text {
+.question-box .question-text,
+.question-preview .question-text {
   font-weight: 500;
   color: var(--color-dark);
+  white-space: pre-wrap;
 }
 
 .info-text {
@@ -408,9 +410,9 @@ h3 {
 
 .question-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
-  padding: 10px 12px;
+  padding: 12px 14px;
   background: white;
   border-radius: 6px;
   margin-bottom: 8px;
@@ -445,8 +447,14 @@ h3 {
 
 .question-text {
   flex: 1;
-  font-size: 14px;
-  color: #666;
+  font-size: 15px;
+  color: #374151;
+  line-height: 1.5;
+  white-space: normal;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 
 .grade-badge {

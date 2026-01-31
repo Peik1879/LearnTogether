@@ -82,7 +82,7 @@ export const Landing: React.FC<LandingProps> = ({ onNavigate }) => {
           </div>
         ) : mode === 'create' ? (
           <div>
-            <p>Als Learner werden Sie zur Upload-Seite weitergeleitet.</p>
+            <p>Als Examiner werden Sie zur Upload-Seite weitergeleitet.</p>
             <button
               onClick={handleCreateSession}
               disabled={loading}

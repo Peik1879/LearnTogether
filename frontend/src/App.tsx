@@ -30,6 +30,7 @@ export const App: React.FC = () => {
         <LearnerPage
           sessionId={sessionData.sessionId}
           token={sessionData.token}
+          role={sessionData.role}
           onNavigate={handleNavigate}
         />
       )}

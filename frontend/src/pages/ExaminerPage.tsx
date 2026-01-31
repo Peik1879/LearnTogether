@@ -190,7 +190,7 @@ export const ExaminerPage: React.FC<ExaminerPageProps> = ({ sessionId, token, on
                   className={`question-item ${idx === session.current_index ? 'current' : ''} ${session.grades[idx] ? 'graded-' + session.grades[idx] : ''}`}
                 >
                   <span className="question-index">{idx + 1}</span>
-                  <span className="question-text">{q.substring(0, 50)}...</span>
+                  <span className="question-text">{q}</span>
                   {session.grades[idx] && (
                     <span className="grade-badge">{session.grades[idx].toUpperCase()}</span>
                   )}
