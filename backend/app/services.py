@@ -56,14 +56,21 @@ class SessionService:
         """
         session = store.get_session(session_id)
         if not session:
-            print(f"[AUTH] Session {session_id} not found")
+            print(f"[AUTH ERROR] Session {session_id} not found")
+            print(f"[AUTH ERROR] Available sessions: {list(store.sessions.keys())}")
+            return False
+        
+        if not token:
+            print(f"[AUTH ERROR] Token is empty or None")
             return False
         
         role = session.tokens.get(token)
-        print(f"[AUTH] Token {token[:4]}... has role: {role}, required: {required_role}")
+        print(f"[AUTH] Session {session_id} - Token {token[:8] if len(token) > 8 else token}... has role: {role}, required: {required_role}")
         print(f"[AUTH] All tokens in session: {list(session.tokens.values())}")
+        print(f"[AUTH] Total tokens in session: {len(session.tokens)}")
         
         if role != required_role:
+            print(f"[AUTH ERROR] Role mismatch: got '{role}', required '{required_role}'")
             return False
         
         return True

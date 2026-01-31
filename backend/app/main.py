@@ -43,9 +43,16 @@ def verify_token(
     x_token: Optional[str] = Header(None)
 ):
     if not x_token:
+        print(f"[AUTH ERROR] Missing X-Token header for session {session_id}")
         raise HTTPException(status_code=401, detail="Missing X-Token header")
     
+    session = store.get_session(session_id)
+    if not session:
+        print(f"[AUTH ERROR] Session {session_id} not found. Available: {list(store.sessions.keys())}")
+        raise HTTPException(status_code=404, detail=f"Session {session_id} not found. It may have expired.")
+    
     if not SessionService.verify_token(session_id, x_token, required_role):
+        print(f"[AUTH ERROR] Token verification failed for session {session_id}, role {required_role}")
         raise HTTPException(status_code=403, detail=f"Invalid token or insufficient permissions for role: {required_role}")
     
     return x_token
@@ -54,6 +61,23 @@ def verify_token(
 # ============================================================================
 # Session Management Endpoints
 # ============================================================================
+
+@app.get("/debug/sessions")
+def debug_sessions():
+    """Debug endpoint to check active sessions (development only)"""
+    sessions_info = []
+    for session_id, session in store.sessions.items():
+        sessions_info.append({
+            "id": session_id,
+            "roles": list(session.tokens.values()),
+            "questions_count": len(session.questions),
+            "current_index": session.current_index,
+            "revealed": session.revealed
+        })
+    return {
+        "total_sessions": len(store.sessions),
+        "sessions": sessions_info
+    }
 
 @app.post("/session")
 def create_session():

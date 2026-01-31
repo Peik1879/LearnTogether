@@ -27,8 +27,19 @@ export const ExaminerPage: React.FC<ExaminerPageProps> = ({ sessionId, token, on
       const data = await sessionAPI.getAllQuestions(sessionId, token);
       setSession(data);
       setLoading(false);
+      setError(''); // Clear any previous errors
     } catch (err: any) {
-      setError(err.response?.data?.detail || 'Failed to load session');
+      const errorMsg = err.response?.data?.detail || 'Failed to load session';
+      console.error('[ExaminerPage] Load error:', errorMsg, err.response?.status);
+      
+      // If session not found (404) or forbidden (403), show helpful message
+      if (err.response?.status === 404) {
+        setError('Session nicht gefunden. Die Session könnte abgelaufen sein. Bitte erstelle eine neue Session.');
+      } else if (err.response?.status === 403) {
+        setError('Zugriff verweigert. Token ungültig oder Session abgelaufen. Bitte neu anmelden.');
+      } else {
+        setError(errorMsg);
+      }
       setLoading(false);
     }
   };
