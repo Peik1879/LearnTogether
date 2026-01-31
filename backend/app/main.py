@@ -16,6 +16,8 @@ cors_origins = [
     "http://localhost:5173",
     "http://localhost:3000",
     "http://localhost:5174",
+    "https://learn-together-aaron-kohlers-projects.vercel.app",
+    "https://learn-together-lilac.vercel.app",
 ]
 if cors_origins_env:
     additional_origins = [o.strip() for o in cors_origins_env.split(",") if o.strip()]
@@ -27,7 +29,7 @@ print(f"[CORS] Environment variable CORS_ORIGINS: {cors_origins_env or 'NOT SET'
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Temporarily allow all origins for testing
+    allow_origins=cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
